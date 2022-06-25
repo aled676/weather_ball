@@ -1,13 +1,21 @@
 loc = null;
 weather = null;
 weathercode = null;
+
+// Here we read "pointers" (API urls) to real world data from the blockchain.
+// In this case the urls can be changed by the NFT owner in case of an API servce failure.
+// The value of dependency contract needs to be changed to the mainnet contract address when the NFT is ready for a mainnet release.
 function preload() {
-  loadJSON("https://ipwhois.app/json/", l =>
-    loadJSON(`https://api.open-meteo.com/v1/forecast?latitude=${l.latitude}&longitude=${l.longitude}&current_weather=true`, w => {
+  // if (tzkt_api==null){ tzkt_api = "https://api.tzkt.io" } 
+  let dependency_contract = "KT1Ff1ZJyc5VxQkxSuLBc8DA1v2TBtsSbuNp"
+  loadJSON(`${tzkt_api}/v1/contracts/${dependency_contract}/storage`, apis => 
+  loadJSON(apis.data.location_api, l =>
+    loadJSON(`${apis.data.weather_api}/v1/forecast?latitude=${l.latitude}&longitude=${l.longitude}&current_weather=true`, w => {
       weathercode = w.current_weather.weathercode
       weather = w
       loc = l
-    }))
+      
+    })))
 }
 
 arrayOfStars = null;
@@ -45,7 +53,6 @@ function globe(day = false) {
   if (day) fill(173, 216, 230, 80)
   else fill(0, 76, 102, 90)
 
-  //that fourth value - fill(r,g,b,?) is for transparency! 
   circle(width / 2, height / 2, 400)
 
 
@@ -54,7 +61,7 @@ function globe(day = false) {
   fill('white')
   rect(width / 2 - 75, height / 2 - 30 + 215, 150, 60)
 
-  //gold decorations
+  //decorations
   fill(235, 178, 45)
   circle(width / 2, height / 2 - 222, 30)
   rect(width / 2 - 20, height / 2 - 210, 40, 10, 2)
@@ -123,13 +130,13 @@ function draw() {
   if (weathercode < 51 && a) {
     birds()
   }
-  if (weathercode >= 51 && weathercode < 71) {
+  if ( (weathercode >= 51 && weathercode < 71) || (weathercode >= 80 && weathercode <= 82) ) {
     for (i = 0; i < rain.length; i++) {
       rain[i].dropRain();
       rain[i].splash();
     }
   }
-  if (weathercode >= 71 && weathercode < 95) {
+  if ((weathercode >= 71 && weathercode <= 77) || (weathercode >= 85 && weathercode <= 86)) {
     snowing();
   }
   if (weathercode >= 95) {
@@ -233,11 +240,11 @@ function drawSun() {
 let img;
 function current_weather() { return "night"; } //rainy, sunny, snow
 
-function preLoad() {
-  img = loadImage('images/moon.pg');
+// function preLoad() {
+//   img = loadImage('images/moon.pg');
 
-  //why wont my image load? I put the function in the draw mode and it just messes up my whole slider, so I removed it for now because then it doesnt work at all.. HELP???!!!I WANT TO ADD A PNG Of A REAL MOON INSTEAD OF THIS ONE AND ITS JUST NOT HAVING IT FOR ME ...... 
-}
+//   //why wont my image load? I put the function in the draw mode and it just messes up my whole slider, so I removed it for now because then it doesnt work at all.. HELP???!!!I WANT TO ADD A PNG Of A REAL MOON INSTEAD OF THIS ONE AND ITS JUST NOT HAVING IT FOR ME ...... 
+// }
 
 
 function moon() {

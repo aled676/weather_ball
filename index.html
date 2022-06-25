@@ -11,7 +11,13 @@
       margin: 0;
     }
   </style>
-  <script src="../p5.js"></script>
+  <script id="parametrized_nft_snippet">
+    let ps = new URLSearchParams(window.location.search)
+    let contract_address = ps.get('contract_address')
+    let token_id = ps.get('token_id')
+    let tzkt_api = ps.get('tzkt_api')
+</script>
+  <script src="./p5.js"></script>
   <!-- <script src="../addons/p5.sound.js"></script> -->
   <script src="sketch.js"></script>
 </head>
